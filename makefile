@@ -2,6 +2,8 @@ SRC_DIR := src
 OBJ_DIR := obj
 BIN_DIR := .
 
+INCLUDES := 
+
 EXE := $(BIN_DIR)/parser
 SRC := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ := $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
