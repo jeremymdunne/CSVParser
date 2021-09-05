@@ -11,6 +11,7 @@ CXXFLAGS 	:= -Wall
 
 .PHONY: all clean
 
+all: $(EXE)
 
 # CSV Parser Library
 CSV_PARSER_DIR 			:= $(LIB_DIR)/CSVParser
@@ -23,8 +24,6 @@ $(CSV_PARSER): $(CSV_PARSER_SRC)
 
 # program
 
-all: $(EXE)
-
 $(EXE): $(OBJ_DIR)\main.o $(CSV_PARSER)
 	$(CXX) $^ -o $@
 
@@ -34,3 +33,4 @@ $(OBJ_DIR)\main.o: $(SRC_DIR)\main.cpp
 clean:
 	del -f *.o
 	del -f $(OBJ_DIR)\*.o
+	del -f $(EXE).exe
