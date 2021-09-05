@@ -1,30 +1,36 @@
-SRC_DIR := src
-OBJ_DIR := obj
-BIN_DIR := .
+SRC_DIR	:= src
+OBJ_DIR	:= obj
+LIB_DIR := lib
 
-INCLUDES := 
-
-EXE := $(BIN_DIR)/parser
-SRC := $(wildcard $(SRC_DIR)/*.cpp)
-OBJ := $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+EXE 		:= parser
+SRC 		:= $(wildcard $(SRC_DIR)/*.cpp)
+OBJ 		:= $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
 CXX 			:= g++
-CPPFLAGS 	:= -Iinclude
 CXXFLAGS 	:= -Wall
-LDFLAGS 	:= -Llib
-LDLIBS 		:= -lm
 
 .PHONY: all clean
 
+
+# CSV Parser Library
+CSV_PARSER_DIR 			:= $(LIB_DIR)/CSVParser
+CSV_PARSER_SRC 			:= $(CSV_PARSER_DIR)/src/CSVParser.cpp
+CSV_PARSER_INC_DIR 	:= $(CSV_PARSER_DIR)/include
+CSV_PARSER					:= $(CSV_PARSER_DIR)/CSVParser.o
+
+$(CSV_PARSER): $(CSV_PARSER_SRC)
+	$(CXX) $(CXXFLAGS) -I$(CSV_PARSER_INC_DIR) -o $@ -c $<
+
+# program
+
 all: $(EXE)
 
-$(EXE): $(OBJ) | $(BIN_DIR)
-	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
+$(EXE): $(OBJ_DIR)\main.o $(CSV_PARSER)
+	$(CXX) $^ -o $@
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+$(OBJ_DIR)\main.o: $(SRC_DIR)\main.cpp
+	$(CXX) $(CXXFLAGS) -I$(CSV_PARSER_INC_DIR) $^ -c -o $@
 
 clean:
-	@$(RM) -rv $(BIN_DIR) $(OBJ_DIR)
-
--include $(OBJ:.o=.d)
+	del -f *.o
+	del -f $(OBJ_DIR)\*.o
